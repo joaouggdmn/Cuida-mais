@@ -23,3 +23,10 @@ export const ROLES = [
     icon: LuHeartHandshake,
   },
 ]
+
+/** Perfis que procuram cuidado: acessam agenda, chat e planos. */
+export const CARE_SEEKER_ROLES = ['elder', 'family']
+
+export function getRole(value) {
+  return ROLES.find((role) => role.value === value) ?? null
+}

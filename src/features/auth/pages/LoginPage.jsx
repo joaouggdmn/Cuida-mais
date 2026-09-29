@@ -19,7 +19,7 @@ export function LoginPage() {
   const onValid = async (credentials) => {
     const user = await login(credentials)
     toast.success(`Olá de novo, ${getFirstName(user.name)}!`)
-    navigate('/minha-area', { replace: true })
+    navigate('/inicio', { replace: true })
   }
 
   return (
