@@ -248,7 +248,7 @@ Requer Node.js 20.19+ ou 22.12+.
 
 ```bash
 npm install
-npm run dev       # servidor de desenvolvimento em http://localhost:5173
+npm run dev       # servidor de desenvolvimento em http://localhost:5174
 npm run build     # build de produção em dist/
 npm run preview   # serve o build localmente
 ```
