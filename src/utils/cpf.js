@@ -11,6 +11,13 @@ export function formatCpf(value) {
     .replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4')
 }
 
+/** Esconde o começo e o fim do CPF para exibição: ***.456.789-** */
+export function maskCpf(value) {
+  const digits = onlyDigits(value)
+  if (digits.length !== 11) return '***.***.***-**'
+  return `***.${digits.slice(3, 6)}.${digits.slice(6, 9)}-**`
+}
+
 function checkDigit(digits, length) {
   const sum = digits
     .slice(0, length)

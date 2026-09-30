@@ -25,7 +25,7 @@ export function RegisterPage() {
     toast.success(`Que bom ter você aqui, ${getFirstName(user.name)}!`, {
       description: 'Sua conta CUIDA+ foi criada.',
     })
-    navigate('/minha-area', { replace: true })
+    navigate('/inicio', { replace: true })
   }
 
   return (

@@ -28,7 +28,7 @@ export function SiteHeader() {
       <button type="button" onClick={handleLogout} className={secondaryActionClassName}>
         Sair
       </button>
-      <Link to="/minha-area" onClick={closeMenu} className={primaryActionClassName}>
+      <Link to="/inicio" onClick={closeMenu} className={primaryActionClassName}>
         Minha conta
         <LuArrowRight size={17} aria-hidden="true" />
       </Link>
