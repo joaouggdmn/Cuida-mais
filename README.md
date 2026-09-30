@@ -99,9 +99,16 @@ Rotas:
 
 | Rota | Acesso | Conteúdo |
 |---|---|---|
-| `/login` | só visitante (quem já entrou vai para `/minha-area`) | Login com e-mail e senha |
+| `/login` | só visitante (quem já entrou vai para `/inicio`) | Login com e-mail e senha |
 | `/cadastro` | só visitante | Cadastro com escolha do perfil |
-| `/minha-area` | só logado (visitante vai para `/login`) | Área provisória do perfil, com saudação e "em breve" |
+| `/inicio` | só logado (visitante vai para `/login`) | Home: próximo atendimento, disponíveis hoje, últimas mensagens, planos e suporte (o cuidador ainda vê a área provisória) |
+| `/agenda` | idoso e familiar (os demais voltam para `/inicio`) | Cuidadores livres nos próximos 7 dias; agendar e cancelar |
+| `/chat`, `/chat/:caregiverId` | idoso e familiar | Conversas com os cuidadores (resposta automática de exemplo) |
+| `/planos` | idoso e familiar | Os 3 planos (valores provisórios) |
+| `/suporte` | só logado | Perguntas frequentes, telefone e WhatsApp |
+| `/conta` | só logado | Dados da conta e botão de sair |
+
+A área logada usa o `AppLayout`: sidebar fixa à esquerda no desktop e barra inferior no celular. Cuidadores, conversas e horários são **mockados** (`src/mocks/caregivers.js`, `features/chat/mockConversations.js`); agendamentos e mensagens ficam salvos no `localStorage`.
 
 Toda a lógica de autenticação fica isolada em `features/auth` (serviço em `services/authStorage.js`, estado global em `contexts/AuthContext.jsx`, acesso pelo hook `useAuth`), para facilitar a troca futura pela API do backend. O hash no navegador é só para não deixar senhas legíveis no `localStorage`; a segurança de verdade virá com a API.
 
@@ -112,7 +119,7 @@ O modelo de negócio ainda **não está fechado**. Hipóteses de trabalho vistas
 - Categorias de serviço: *Companhia que faz bem*, *Apoio na rotina*, *Bem-estar sob medida*.
 - Algum tipo de assinatura/plano para liberar o acesso ao serviço de agendamento.
 
-A feature `subscription` existe como placeholder na estrutura, pronta para receber a definição de planos quando ela existir.
+A página `/planos` (feature `subscription`) já mostra 3 planos com nomes e valores provisórios em `features/subscription/plans.js`, prontos para receber a definição real.
 
 ## Stack tecnológica
 
@@ -169,7 +176,7 @@ frontend/
 │   │   └── providers/             # AppProviders (Toaster etc.)
 │   ├── assets/                    # imagens, fontes, ícones customizados
 │   ├── components/                # UI compartilhada, sem regra de negócio
-│   │   └── ui/                    # Logo, TextField, PasswordField, Toaster (futuros: Button, Card, Modal...)
+│   │   └── ui/                    # Logo, TextField, PasswordField, Toaster, Card, PageHeader
 │   ├── features/
 │   │   ├── marketing/             # landing pública institucional
 │   │   │   ├── components/        # TopBar, SiteHeader, Hero, CareAreaSection, ServiceCategories, HowItWorks,
@@ -178,52 +185,37 @@ frontend/
 │   │   │   └── content.js          # textos e dados da landing (FAQ, cuidadores de exemplo, cidades...)
 │   │   ├── auth/                  # cadastro/login, papel do usuário
 │   │   │   ├── components/         # AuthCard, RoleSelector
-│   │   │   ├── hooks/              # useAuth, useAuthForm
+│   │   │   ├── hooks/              # useAuth, useAuthForm, useLogout
 │   │   │   ├── pages/              # LoginPage, RegisterPage
 │   │   │   ├── services/           # authStorage.js (cadastro, login, sessão)
 │   │   │   ├── roles.js            # perfis: idoso, familiar, cuidador
 │   │   │   └── validation.js       # regras dos formulários
-│   │   ├── caregivers/             # vitrine de profissionais: listagem, perfil, disponibilidade, avaliação
-│   │   │   ├── components/         # CaregiverCard, RatingStars, AvailabilityBadge
-│   │   │   ├── hooks/
-│   │   │   ├── pages/
-│   │   │   └── services/
-│   │   ├── scheduling/             # escolha de cidade/data, solicitação e confirmação de atendimento
-│   │   │   ├── components/         # CityPicker, ScheduleCalendar, RequestSummary
-│   │   │   ├── hooks/
-│   │   │   ├── pages/
-│   │   │   └── services/
-│   │   ├── caregiver-agenda/       # agenda do cuidador: solicitações pendentes, aceitar/recusar, disponibilidade
-│   │   │   ├── components/
-│   │   │   ├── pages/
-│   │   │   └── services/
-│   │   ├── emergency/              # placeholder: "Pedir ajuda rápida" (SOS)
-│   │   │   ├── components/
-│   │   │   ├── pages/
-│   │   │   └── services/
-│   │   ├── chat/                   # placeholder: "Abrir conversa" entre idoso/familiar/cuidador
-│   │   │   ├── components/
-│   │   │   ├── pages/
-│   │   │   └── services/
-│   │   ├── subscription/           # planos/assinatura (placeholder, modelo de negócio indefinido)
-│   │   │   ├── components/
-│   │   │   ├── pages/
-│   │   │   └── services/
-│   │   ├── users/                  # perfis de idoso/familiar/cuidador
-│   │   └── dashboard/               # áreas logadas por tipo de usuário
-│   │       ├── pages/               # DashboardPage (provisória, conteúdo por perfil)
-│   │       ├── roleContent.js       # textos de cada área: idoso, familiar, cuidador
-│   │       ├── elderly/             # (futuro) "Área do idoso"
-│   │       ├── family/              # (futuro) "Minha Área CUIDA+" (visão familiar)
-│   │       └── caregiver/           # (futuro) área do cuidador
-│   ├── contexts/                     # AuthContext (usuário logado, login, cadastro, logout)
+│   │   ├── home/                   # HomePage (/inicio): cards de resumo; CaregiverHome provisória
+│   │   ├── scheduling/             # AgendaPage: dias, horários livres, confirmação e "Meus agendamentos"
+│   │   │   ├── components/         # DayPicker, CaregiverSlotsCard, ConfirmBookingDialog, MyBookings
+│   │   │   ├── hooks/              # useBookings
+│   │   │   ├── services/           # bookingStorage.js
+│   │   │   └── availability.js     # horários livres de um cuidador em um dia
+│   │   ├── chat/                   # ChatPage: lista de conversas + conversa aberta
+│   │   │   ├── components/         # ConversationList, ConversationThread
+│   │   │   ├── hooks/              # useChat
+│   │   │   ├── services/           # chatStorage.js (conversas por usuário)
+│   │   │   └── mockConversations.js
+│   │   ├── subscription/           # PlansPage + plans.js (planos provisórios)
+│   │   ├── support/                # SupportPage, ContactButtons, content.js (FAQ e contatos provisórios)
+│   │   ├── account/                # AccountPage (dados da conta, sair)
+│   │   ├── caregivers/             # CaregiverAvatar (futuro: perfil e avaliações do cuidador)
+│   │   ├── caregiver-agenda/       # (futuro) agenda do cuidador: solicitações, aceitar/recusar, disponibilidade
+│   │   └── emergency/              # (futuro) "Pedir ajuda rápida" (SOS)
+│   ├── contexts/                     # AuthContext (sessão), ChatContext (conversas e não lidas)
 │   ├── hooks/                         # hooks globais reutilizáveis
-│   ├── layouts/                        # MarketingLayout, AuthLayout, DashboardLayout
+│   ├── layouts/                        # MarketingLayout, AuthLayout, AppLayout (+ app/: Sidebar, MobileNav, navigation)
 │   ├── lib/
 │   │   └── storage/                     # storage.js: wrapper sobre localStorage (até a API ficar pronta)
-│   ├── routes/                           # ProtectedRoute (só logado), GuestRoute (só visitante)
+│   ├── mocks/                            # dados fictícios da área logada (cuidadores e horários)
+│   ├── routes/                           # ProtectedRoute (só logado), GuestRoute (só visitante), RoleRoute (por perfil)
 │   ├── styles/                            # globals.css: import do Tailwind, fontes e estilos base
-│   ├── utils/                              # cpf.js (máscara e validação), name.js
+│   ├── utils/                              # cpf.js (máscara e validação), name.js, date.js
 │   └── main.jsx
 ├── index.html
 ├── jsconfig.json                           # alias "@/" → src/ para o editor
