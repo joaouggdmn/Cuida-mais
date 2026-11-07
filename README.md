@@ -26,6 +26,7 @@ Parte das telas e da linguagem foi inspirada em um protótipo de referência fei
 - [Estrutura de pastas](#estrutura-de-pastas-feature-based)
 - [Roadmap](#roadmap)
 - [Como rodar](#como-rodar)
+- [Suporte com IA](#suporte-com-ia)
 - [Autor](#autor)
 
 ---
@@ -216,8 +217,31 @@ npm run build     # build de produção em dist/
 npm run preview   # serve o build localmente
 ```
 
+
+O backend (Spring Boot + PostgreSQL) ficará na pasta `../backend`, ainda não inicializada.
+
+## Suporte com IA
+
+A página **Suporte** tem um assistente virtual que responde dúvidas sobre o uso da plataforma, usando o **Google Gemini Flash** (plano gratuito).
+
+- **Função serverless** `api/chat.js`: roda na Vercel, guarda a chave e chama o Gemini. O navegador só conversa com `/api/chat` e nunca vê a chave. A função aceita só requisições do próprio site, limita o tamanho e a quantidade de mensagens e tem um limite básico por IP.
+- **Conhecimento da IA** `api/_lib/supportKnowledge.js`: regras de comportamento (não dar orientação médica, indicar o SAMU em emergência, não pedir dados pessoais) e o resumo de como o app funciona. FAQ, contatos e planos vêm de `src/features/support/content.js` e `src/features/subscription/plans.js`, então a IA acompanha as mudanças nesses arquivos.
+- **Front**: `src/features/support/` (`SupportChat`, `useSupportChat`). O chat aparece na página Suporte e também na landing page, na seção de dúvidas, para visitantes sem login (perfil `visitor`). O histórico fica no `localStorage`, na chave `cuida:support-chat:<id do usuário>`, ou `cuida:support-chat:guest` para visitantes.
+- O FAQ e as cidades da landing ficam em `src/features/marketing/publicInfo.js`, sem dependências, para a função serverless também conseguir lê-los.
+
+### Configuração
+
+1. Crie uma chave gratuita em [Google AI Studio](https://aistudio.google.com) → **Get API key** → **Create API key**. Não ative o faturamento (billing) no projeto do Google Cloud: assim nada é cobrado, e ao fim da cota grátis a API só recusa pedidos até a cota renovar.
+2. **Local**: copie `.env.example` para `.env.local`, preencha `GEMINI_API_KEY` e reinicie o `npm run dev`. Um plugin do Vite em `vite.config.js` executa `api/chat.js` no servidor de desenvolvimento.
+3. **Vercel**: em **Settings → Environment Variables**, cadastre `GEMINI_API_KEY` (Production e Preview) e faça um novo deploy.
+
+Opcional: `GEMINI_MODEL` troca o modelo. O padrão é `gemini-3.6-flash`. Se ele estiver sobrecarregado, lento ou sem cota, a função tenta `gemini-flash-lite-latest`. Evite o apelido `gemini-flash-latest`: ele aponta para o Flash mais novo, que costuma ficar sobrecarregado no plano grátis.
+
+> No plano gratuito, o Google pode usar as mensagens para melhorar os produtos dele. Não use o chat com dados reais de pessoas.
+
 O back-end (Spring Boot + PostgreSQL) ainda não foi iniciado.
 
 ## Autor
 
-**João Pedro Uggioni Damin** · [GitHub](https://github.com/joaouggdmn) · [LinkedIn](https://linkedin.com/in/joaopedrouggioni)
+**João Pedro Uggioni** · [GitHub](https://github.com/joaouggdmn) · [LinkedIn](https://linkedin.com/in/joaopedrouggioni)
+

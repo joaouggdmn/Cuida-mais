@@ -1,6 +1,18 @@
-import { LuClock3, LuPhone } from 'react-icons/lu'
+import { LuCalendarCheck, LuClock3, LuHeartHandshake, LuPhone } from 'react-icons/lu'
 import { toast } from 'sonner'
+import { SUPPORT_CONTACT } from '@/features/support/content'
 import { CITIES } from '../content'
+
+// O que diferencia este canal do assistente virtual: aqui quem responde é uma pessoa.
+const HUMAN_SUPPORT_PROMISES = [
+  {
+    icon: LuHeartHandshake,
+    title: 'Atendimento feito por pessoas',
+    description: 'Quem retorna é alguém da nossa equipe, não um robô.',
+  },
+  { icon: LuClock3, title: 'Sem compromisso e sem pressa', description: 'Uma conversa simples, no seu tempo.' },
+  { icon: LuCalendarCheck, title: 'Retorno no horário de atendimento', description: SUPPORT_CONTACT.hours },
+]
 
 // Inputs e textarea herdam a fonte do rótulo; só o select define a sua (text-base font-medium).
 const fieldClassName =
@@ -22,20 +34,27 @@ export function ContactForm() {
 
       <div className="container relative grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <div>
-          <p className="section-kicker">VAMOS CONVERSAR</p>
+          <p className="section-kicker text-[#d7ecff]">FALE COM A NOSSA EQUIPE</p>
           <h2 className="font-display mt-4 text-4xl font-semibold leading-[1.02] tracking-[-0.045em] sm:text-5xl">
             Todo cuidado começa com um olá.
           </h2>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-white/90">
-            Conte um pouco do que você e sua família precisam. Nós ajudamos a encontrar o próximo passo com
-            calma.
+            Deixe seu contato e uma pessoa da equipe CUIDA+ liga ou chama no WhatsApp para entender, com calma, o que
+            você e sua família precisam.
           </p>
-          <div className="mt-8 flex items-center gap-3 text-sm font-bold text-white/90">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15">
-              <LuClock3 size={19} aria-hidden="true" />
-            </span>
-            <span>Uma conversa simples, no seu tempo.</span>
-          </div>
+          <ul className="mt-8 space-y-4 text-white/90">
+            {HUMAN_SUPPORT_PROMISES.map(({ icon: Icon, title, description }) => (
+              <li key={title} className="flex items-start gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
+                  <Icon size={19} aria-hidden="true" />
+                </span>
+                <span>
+                  <span className="block font-extrabold text-white">{title}</span>
+                  <span className="block text-sm leading-relaxed">{description}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <form
@@ -86,7 +105,7 @@ export function ContactForm() {
             type="submit"
             className="mt-6 flex min-h-13 w-full items-center justify-center gap-2 rounded-full bg-[#123f66] px-6 py-3.5 text-white transition hover:bg-[#0d2f4f] active:scale-[0.98]"
           >
-            Enviar pedido de conversa
+            Quero falar com a equipe
             <LuPhone size={18} aria-hidden="true" />
           </button>
           <p className="mt-4 text-center text-xs leading-relaxed text-[#71879b]">
