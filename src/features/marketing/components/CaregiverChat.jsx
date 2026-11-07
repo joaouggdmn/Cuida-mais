@@ -21,7 +21,7 @@ export function CaregiverChat() {
   return (
     <div className="rounded-[1.6rem] border bg-[#123f66] p-6 text-white xl:col-span-3">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        <div className="min-w-[230px]">
+        <div className="lg:min-w-[230px]">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-[#b9d9f3]">
               <LuMessageCircle size={22} aria-hidden="true" />
@@ -36,7 +36,7 @@ export function CaregiverChat() {
           </p>
         </div>
 
-        <div className="flex-1 rounded-2xl bg-white p-4 text-[#183f61]">
+        <div className="min-w-0 flex-1 rounded-2xl bg-white p-4 text-[#183f61]">
           <div className="max-h-44 space-y-3 overflow-y-auto pr-1">
             {messages.map((message, index) => (
               <div

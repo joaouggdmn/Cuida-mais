@@ -25,7 +25,12 @@ export function CareAreaSection() {
             </p>
           </div>
 
-          <div className="flex rounded-2xl border bg-[#f1f7fc] p-1.5" role="tablist" aria-label="Tipo de acesso">
+          {/* No celular, as duas abas dividem a largura toda; a partir do sm, voltam ao tamanho do texto. */}
+          <div
+            className="flex w-full shrink-0 rounded-2xl border bg-[#f1f7fc] p-1.5 sm:w-auto sm:self-start lg:self-auto"
+            role="tablist"
+            aria-label="Tipo de acesso"
+          >
             {AUDIENCE_TABS.map(({ value, label, icon: Icon }) => (
               <button
                 key={value}
@@ -33,7 +38,7 @@ export function CareAreaSection() {
                 role="tab"
                 aria-selected={audience === value}
                 onClick={() => setAudience(value)}
-                className={`flex items-center gap-2 rounded-xl px-4 py-3 transition ${
+                className={`flex min-h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-2 py-3 transition sm:flex-none sm:px-4 ${
                   audience === value ? 'bg-[#123f66] text-white shadow-md' : 'text-[#245a82] hover:bg-white'
                 }`}
               >

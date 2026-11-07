@@ -1,25 +1,37 @@
 import { useState } from 'react'
 import { LuArrowRight, LuCalendarDays, LuCircleCheck, LuMapPin } from 'react-icons/lu'
-import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 import { CAREGIVERS, CITIES, WEEKDAYS } from '../content'
 import { CaregiverChat } from './CaregiverChat'
+import { LoginPromptDialog } from './LoginPromptDialog'
 
 const OCTOBER_DAYS = Array.from({ length: 31 }, (_, index) => index + 1)
 
 export function FamilyBookingPanel() {
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const [city, setCity] = useState('Criciúma')
   const [day, setDay] = useState(12)
   const [caregiverId, setCaregiverId] = useState('maria')
+  const [loginPrompt, setLoginPrompt] = useState(null)
 
+  // Quem já entrou vai direto para a agenda de verdade; visitante recebe o convite para entrar.
   const requestAppointment = () => {
+    if (user) {
+      navigate('/agenda')
+      return
+    }
     const caregiver = CAREGIVERS.find(({ id }) => id === caregiverId)
-    toast.success('Solicitação pronta', {
-      description: `Vamos verificar ${caregiver?.name} para o dia ${day} em ${city}.`,
+    setLoginPrompt({
+      title: 'Entre para solicitar o atendimento',
+      description: `Para agendar com ${caregiver?.name ?? 'o cuidador'} no dia ${day} de outubro, em ${city}, entre na sua conta ou crie uma. Leva só um minuto.`,
     })
   }
 
   return (
-    <div className="mt-12 grid gap-6 xl:grid-cols-[0.75fr_1.25fr_1fr]">
+    // grid-cols-1 = minmax(0, 1fr): no celular, os cartões nunca passam da largura da tela.
+    <div className="mt-12 grid grid-cols-1 gap-6 xl:grid-cols-[0.75fr_1.25fr_1fr]">
       <div className="rounded-[1.6rem] border bg-[#f7fbff] p-6">
         <div className="flex items-center gap-3">
           <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#dff1ff] text-[#1f5e8d]">
@@ -75,7 +87,7 @@ export function FamilyBookingPanel() {
               onClick={() => setDay(date)}
               aria-label={`Selecionar dia ${date} de outubro`}
               aria-pressed={day === date}
-              className={`aspect-square rounded-xl transition ${
+              className={`aspect-square min-w-0 rounded-xl transition ${
                 day === date ? 'bg-[#123f66] text-white shadow-md' : 'text-[#245a82] hover:bg-[#e5f3ff]'
               }`}
             >
@@ -91,12 +103,12 @@ export function FamilyBookingPanel() {
       </div>
 
       <div className="rounded-[1.6rem] border bg-[#f7fbff] p-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <div>
             <p className="section-kicker">VITRINE DE PROFISSIONAIS</p>
             <h3 className="font-display mt-2 text-2xl font-semibold text-[#12395a]">Quem você prefere?</h3>
           </div>
-          <span className="text-sm font-bold text-[#5b748b]">{CAREGIVERS.length} opções</span>
+          <span className="shrink-0 text-sm font-bold text-[#5b748b]">{CAREGIVERS.length} opções</span>
         </div>
 
         <div className="mt-5 grid gap-3">
@@ -141,6 +153,7 @@ export function FamilyBookingPanel() {
       </div>
 
       <CaregiverChat />
+      <LoginPromptDialog prompt={loginPrompt} onClose={() => setLoginPrompt(null)} />
     </div>
   )
 }

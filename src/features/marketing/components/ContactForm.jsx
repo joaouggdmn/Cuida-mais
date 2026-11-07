@@ -1,17 +1,12 @@
 import { LuCalendarCheck, LuClock3, LuHeartHandshake, LuPhone } from 'react-icons/lu'
 import { toast } from 'sonner'
-import { SUPPORT_CONTACT } from '@/features/support/content'
 import { CITIES } from '../content'
 
 // O que diferencia este canal do assistente virtual: aqui quem responde é uma pessoa.
 const HUMAN_SUPPORT_PROMISES = [
-  {
-    icon: LuHeartHandshake,
-    title: 'Atendimento feito por pessoas',
-    description: 'Quem retorna é alguém da nossa equipe, não um robô.',
-  },
-  { icon: LuClock3, title: 'Sem compromisso e sem pressa', description: 'Uma conversa simples, no seu tempo.' },
-  { icon: LuCalendarCheck, title: 'Retorno no horário de atendimento', description: SUPPORT_CONTACT.hours },
+  { icon: LuHeartHandshake, title: 'Atendimento feito por pessoas' },
+  { icon: LuClock3, title: 'Sem compromisso e sem pressa' },
+  { icon: LuCalendarCheck, title: 'Retorno no horário de atendimento' },
 ]
 
 // Inputs e textarea herdam a fonte do rótulo; só o select define a sua (text-base font-medium).
@@ -29,7 +24,8 @@ export function ContactForm() {
 
   return (
     <section id="contato" className="relative overflow-hidden bg-[#2d7bbf] py-20 text-white sm:py-28">
-      <div className="absolute -right-16 -top-20 h-80 w-80 rounded-full border-[40px]" />
+      {/* No celular o círculo ficaria por cima do título; só aparece a partir do sm. */}
+      <div className="absolute -right-16 -top-20 hidden h-80 w-80 rounded-full border-[40px] sm:block" />
       <div className="absolute -bottom-32 left-[18%] h-64 w-64 rounded-full bg-[#9ecbf0]/25 blur-2xl" />
 
       <div className="container relative grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
@@ -43,15 +39,12 @@ export function ContactForm() {
             você e sua família precisam.
           </p>
           <ul className="mt-8 space-y-4 text-white/90">
-            {HUMAN_SUPPORT_PROMISES.map(({ icon: Icon, title, description }) => (
-              <li key={title} className="flex items-start gap-3">
+            {HUMAN_SUPPORT_PROMISES.map(({ icon: Icon, title }) => (
+              <li key={title} className="flex items-center gap-3">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
                   <Icon size={19} aria-hidden="true" />
                 </span>
-                <span>
-                  <span className="block font-extrabold text-white">{title}</span>
-                  <span className="block text-sm leading-relaxed">{description}</span>
-                </span>
+                <span className="font-extrabold text-white">{title}</span>
               </li>
             ))}
           </ul>
