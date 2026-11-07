@@ -13,16 +13,8 @@ export const MOBILE_NAV_LINKS = [
   { label: 'Sobre nós', href: '#sobre' },
 ]
 
-export const CITIES = [
-  'Nova Veneza',
-  'Siderópolis',
-  'Criciúma',
-  'Içara',
-  'Balneário Rincão',
-  'Lauro Müller',
-  'Morro Grande',
-  'Outros',
-]
+// Cidades e FAQ ficam em publicInfo.js (sem dependências) porque a IA do suporte também os lê.
+export { CITIES, FAQ_ITEMS } from './publicInfo'
 
 export const WEEKDAYS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
 
@@ -55,24 +47,6 @@ export const ESSENCE_VALUES = [
   'Rotinas com significado',
   'Parceria com a família',
   'Presença com respeito',
-]
-
-export const FAQ_ITEMS = [
-  {
-    question: 'Como encontro o cuidado certo para a minha família?',
-    answer:
-      'Começamos ouvindo. Em uma conversa inicial, entendemos a rotina, as necessidades e o jeito de viver da pessoa idosa para desenhar um plano de cuidado que faça sentido.',
-  },
-  {
-    question: 'O atendimento pode acontecer na casa da pessoa idosa?',
-    answer:
-      'Sim. A CUIDA+ foi imaginada para levar acolhimento até onde a vida acontece: em casa, com respeito à autonomia, aos horários e às histórias de cada pessoa.',
-  },
-  {
-    question: 'A família acompanha o que está acontecendo?',
-    answer:
-      'A comunicação é simples e próxima. Combinamos junto à família a melhor forma de manter todos informados sobre a rotina e os próximos passos.',
-  },
 ]
 
 // `color` guarda as classes Tailwind do avatar com as iniciais.
