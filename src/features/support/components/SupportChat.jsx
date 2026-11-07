@@ -14,12 +14,14 @@ const DEFAULT_WELCOME =
  * Chat com o assistente virtual (IA) do suporte. Funciona com ou sem login.
  * `className` define a altura. `humanContactHref` troca os botões de telefone/WhatsApp
  * da caixa de erro por um link para o atendimento humano (ex.: "#contato" na landing).
+ * `footer` aparece abaixo do campo de mensagem (ex.: link para a página de Suporte).
  */
 export function SupportChat({
   title = 'Tire sua dúvida agora',
   welcome = DEFAULT_WELCOME,
   suggestions = DEFAULT_SUGGESTIONS,
   humanContactHref,
+  footer,
   className = 'h-[34rem]',
 }) {
   const { messages, sending, error, canRetry, send, retry, reset } = useSupportChat()
@@ -193,6 +195,8 @@ export function SupportChat({
           <LuSend size={18} aria-hidden="true" />
         </button>
       </form>
+
+      {footer && <div className="border-t bg-white px-4 py-3 sm:px-6">{footer}</div>}
     </section>
   )
 }
