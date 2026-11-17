@@ -1,6 +1,7 @@
 import { LuChevronDown, LuClock3, LuHeadset } from 'react-icons/lu'
 import { Card } from '@/components/ui/Card'
 import { PageHeader } from '@/components/ui/PageHeader'
+import { AssistantGreeting } from '../components/AssistantGreeting'
 import { ContactButtons } from '../components/ContactButtons'
 import { SupportChat } from '../components/SupportChat'
 import { SUPPORT_CONTACT, SUPPORT_FAQ } from '../content'
@@ -16,7 +17,10 @@ export function SupportPage() {
 
       <div className="mt-10 grid items-start gap-6 lg:grid-cols-[1fr_300px]">
         <div className="grid min-w-0 gap-6">
-          <SupportChat className="h-[36rem]" />
+          <div className="min-w-0">
+            <AssistantGreeting className="mb-5" />
+            <SupportChat className="h-[36rem]" />
+          </div>
 
           <Card aria-labelledby="duvidas-comuns" className="sm:p-8">
             <p className="section-kicker">DÚVIDAS COMUNS</p>

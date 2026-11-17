@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import { LuArrowDown, LuBot, LuRotateCcw, LuSend } from 'react-icons/lu'
+import { LuArrowDown, LuRotateCcw, LuSend } from 'react-icons/lu'
 import { formatTime } from '@/utils/date'
+import { ASSISTANT } from '../assistant'
 import { SUPPORT_FAQ } from '../content'
 import { useSupportChat } from '../hooks/useSupportChat'
 import { ContactButtons } from './ContactButtons'
 
 const MAX_LENGTH = 800
 const DEFAULT_SUGGESTIONS = SUPPORT_FAQ.slice(0, 3).map(({ question }) => question)
+// A apresentação ("Olá! Eu sou o Antônio...") fica no balão AssistantGreeting, acima do card.
 const DEFAULT_WELCOME =
-  'Olá! Sou o assistente virtual do CUIDA+. Posso ajudar com agendamentos, chat, planos e o uso do site. Como posso ajudar?'
+  'Posso ajudar com agendamentos, chat, planos e o uso do site. Escolha uma dúvida abaixo ou escreva a sua.'
 
 /**
- * Chat com o assistente virtual (IA) do suporte. Funciona com ou sem login.
+ * Chat com o Antônio, o assistente virtual (IA) do suporte. Funciona com ou sem login.
  * `className` define a altura. `humanContactHref` troca os botões de telefone/WhatsApp
  * da caixa de erro por um link para o atendimento humano (ex.: "#contato" na landing).
  * `footer` aparece abaixo do campo de mensagem (ex.: link para a página de Suporte).
@@ -59,11 +61,15 @@ export function SupportChat({
       className={`flex max-h-[calc(100dvh-9rem)] min-h-[26rem] flex-col overflow-hidden rounded-[1.6rem] border bg-white shadow-[0_9px_30px_rgba(24,57,90,0.06)] ${className}`}
     >
       <header className="flex items-center gap-3 border-b px-4 py-4 sm:px-6">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#e5f3ff] text-[#1f5e8d]">
-          <LuBot size={24} aria-hidden="true" />
-        </span>
+        <img
+          src={ASSISTANT.photo}
+          alt=""
+          width={48}
+          height={48}
+          className="h-12 w-12 shrink-0 rounded-full object-cover ring-2 ring-[#e5f3ff]"
+        />
         <div className="min-w-0 flex-1">
-          <p className="section-kicker">ASSISTENTE VIRTUAL</p>
+          <p className="section-kicker">{ASSISTANT.name.toUpperCase()} · ASSISTENTE VIRTUAL</p>
           <h2 id="assistente-virtual" className="font-display mt-1 text-xl font-semibold text-[#12395a] sm:text-2xl">
             {title}
           </h2>
@@ -114,7 +120,7 @@ export function SupportChat({
                 {message.text}
               </p>
               <span className="mt-1 px-1 text-xs text-[#7190a8]">
-                {mine ? '' : 'Assistente · '}
+                {mine ? '' : `${ASSISTANT.name} · `}
                 {formatTime(message.sentAt)}
               </span>
             </div>
@@ -124,7 +130,7 @@ export function SupportChat({
         {sending && (
           <div className="flex items-start">
             <p className="rounded-2xl rounded-bl-md border bg-white px-4 py-2.5 text-[#5b748b]">
-              <span className="animate-pulse">Digitando…</span>
+              <span className="animate-pulse">{ASSISTANT.name} está digitando…</span>
             </p>
           </div>
         )}

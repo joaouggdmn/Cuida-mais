@@ -2,11 +2,15 @@ import { LuArrowRight } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import { SupportChat } from '@/features/support/components/SupportChat'
 
-/** Suporte na tela de início: o chat com o assistente virtual e o atalho para a página de Suporte. */
+// Sem o balão AssistantGreeting aqui (ocupava espaço demais), a apresentação vai na própria conversa.
+const HOME_WELCOME = 'Olá! Eu sou o Antônio. Posso ajudar com agendamentos, chat, planos e o uso do site.'
+
+/** Suporte na tela de início: o chat com o Antônio e o atalho para a página de Suporte. */
 export function SupportCard() {
   return (
     <SupportChat
       title="Precisa de ajuda?"
+      welcome={HOME_WELCOME}
       className="h-[28rem]"
       footer={
         <Link
