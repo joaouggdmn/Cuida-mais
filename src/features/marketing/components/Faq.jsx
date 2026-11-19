@@ -1,9 +1,10 @@
 import { LuArrowDown, LuChevronDown } from 'react-icons/lu'
+import { AssistantGreeting } from '@/features/support/components/AssistantGreeting'
 import { SupportChat } from '@/features/support/components/SupportChat'
 import { FAQ_ITEMS } from '../content'
 
 const VISITOR_WELCOME =
-  'Olá! Sou o assistente virtual do CUIDA+. Posso explicar como a plataforma funciona, as cidades que atendemos e os planos. Pode perguntar do seu jeito.'
+  'Posso explicar como o CUIDA+ funciona, as cidades que atendemos e os planos. Pode perguntar do seu jeito.'
 const VISITOR_SUGGESTIONS = ['Como o CUIDA+ funciona?', 'Quais cidades vocês atendem?', 'Quanto custa?']
 
 export function Faq() {
@@ -36,6 +37,7 @@ export function Faq() {
         </div>
 
         <div className="min-w-0">
+          <AssistantGreeting className="mb-5" />
           <SupportChat
             className="h-[32rem]"
             welcome={VISITOR_WELCOME}
