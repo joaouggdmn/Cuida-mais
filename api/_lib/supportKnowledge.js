@@ -2,7 +2,7 @@
 // FAQ, contatos, cidades e planos vêm dos mesmos arquivos que o site usa, então a IA acompanha as mudanças.
 // O prefixo `_` na pasta impede a Vercel de expor este arquivo como rota.
 import { CITIES, FAQ_ITEMS } from '../../src/features/marketing/publicInfo.js'
-import { formatPrice, PLANS } from '../../src/features/subscription/plans.js'
+import { formatPlanPrice, PLANS, PRICE_NOTE } from '../../src/features/subscription/plans.js'
 import { SUPPORT_CONTACT, SUPPORT_FAQ } from '../../src/features/support/content.js'
 
 const SERVICE_CITIES = CITIES.filter((city) => city !== 'Outros')
@@ -28,9 +28,13 @@ export const ALLOWED_ROLES = Object.keys(ROLE_CONTEXT)
 
 const faqText = [...FAQ_ITEMS, ...SUPPORT_FAQ].map(({ question, answer }) => `P: ${question}\nR: ${answer}`).join('\n\n')
 
-const plansText = PLANS.map(
-  (plan) => `- ${plan.name} (${formatPrice(plan.price)}/mês): ${plan.tagline} Inclui: ${plan.features.join('; ')}.`,
-).join('\n')
+const plansText = [
+  ...PLANS.map((plan) => {
+    const { prefix, value } = formatPlanPrice(plan)
+    return `- Plano ${plan.name}, ${plan.tagline.toLowerCase()} (${prefix.toLowerCase()} ${value}/mês). Inclui: ${plan.features.join('; ')}.`
+  }),
+  PRICE_NOTE,
+].join('\n')
 
 const BASE_PROMPT = `Você é o Antônio, o assistente virtual de suporte do CUIDA+, uma plataforma que conecta idosos, seus familiares e cuidadores profissionais para buscar, agendar e acompanhar serviços de cuidado.
 

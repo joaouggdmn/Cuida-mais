@@ -29,7 +29,7 @@ export const SUPPORT_FAQ = [
   {
     question: 'Preciso ter um plano para usar a plataforma?',
     answer:
-      'Você pode conhecer os cuidadores e conversar com eles sem plano. Os planos reúnem os atendimentos do mês com um valor fixo; veja as opções na página Planos.',
+      'Você pode conhecer os cuidadores e conversar com eles sem plano. Os planos vão do suporte básico à assistência 24 horas, e os valores variam conforme as necessidades do idoso; veja as opções na página Planos.',
   },
   {
     question: 'E se eu precisar de ajuda urgente?',
